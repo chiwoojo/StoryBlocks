@@ -6,6 +6,7 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
       form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      #username-form { height: 80px;  } 
       form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
       form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
@@ -14,24 +15,44 @@
     </style>
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form action="">
+    <div id="messages"></div>
+    <form action="" id="username-form">
+      <input id="u" autocomplete="off" /><button>Change username</button>
+    </form>
+    <form action="" id="message-form">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
-      $('form').submit(function() {
-        //emit an event called 'chat message', and send the value of the chat message over
+      
+      var data = {
+        username : ''
+      };
+      
+      //send message
+      $('#message-form').submit(function(e) {
         socket.emit('chat message', $('#m').val());
-        //empty chat message that the user typed
         $('#m').val('');
+        //returns false to prevent default event
         return false; 
       });
+      
+     //change user name
+     $('#username-form').submit(function(e) {
+       socket.emit('add user', $('#u').val());
+       data.username = $('#u').val();
+       $('#u').val('');
+       return false;
+     });
+      
+      //when emit 'chat message' fires from server
       socket.on('chat message', function(msg) {
-        $('#messages').append($('<li>').text(msg));
+        $('#messages').append($('<div>').text(data.username + ": " + msg));
       });
+      
+      
     </script>
   </body>
 </html>
