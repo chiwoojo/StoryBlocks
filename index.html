@@ -17,28 +17,40 @@
   </head>
   
   <body>
+
+     <!-- Inside Modal -->
+     <div id="modal1" class="modal">
+       <div class="modal-content">
+         <div class="input-field">
+           <input id="u" type="text" class="validate">
+           <label for="story-line">Change Username to...</label>
+         </div>
+       </div>
+       <div class="modal-footer">
+         <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" id="username-form">Change</a>
+         <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+       </div>
+     </div>
+     
+    <!-- Messages Collection -->
     <div id="messages"></div>
-<!--     
-    <form action="" id="username-form">
-      <input id="u" autocomplete="off" /><button>Change username</button>
-    </form> 
--->
-  <div class="row" id="message-row">
-    <form action="" id="message-form" class="col s12">
-      <div class="input-field col s8">
-        <input id="m" type="text" class="validate">
-        <label for="story-line">Continue the story...</label>
-      </div>
-    </form>
-  </div>
-<!--     
-    <div class="login page">
-      <div class="form">
-        <h3 class="title">Your name?</h3>
-        <input class="usernameInput" type="text" maxlength="15">
-      </div>
-    </div> 
--->
+
+    <!-- Message input box -->
+    <div class="row" id="message-row">
+      <form action="" id="message-form" class="col s12">
+        <div class="input-field col s8">
+          <input id="m" type="text" class="validate">
+          <label for="username-change">Continue the story...</label>
+        </div>
+        <div class="col s4">  
+          <!-- Modal Trigger -->
+          <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Change User name</a>
+        </div>
+      </form>
+    </div>
+    
+    
+
     <!-- Socket IO client library -->
     <script src="/socket.io/socket.io.js"></script>
     <!-- jQuery -->
@@ -66,10 +78,12 @@
       });
       
       //change user name
-      $('#username-form').submit(function(e) {
+      $('#username-form').on('click', function(e) {
+        console.log("inside of username-form jQuery click");
         e.preventDefault();
         var username = $('#u').val();
         data.username = username;
+        $('#u').val('');
         return false;
       });
       
@@ -87,6 +101,8 @@
         $('.tooltipped').tooltip();
         //$('#' + data.uniqueId).qtip();
       });      
+      
+      $('.modal-trigger').leanModal();
       
     </script>
   </body>
