@@ -12,7 +12,9 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+      .message {display: inline;}
     </style>
+    <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/qtip2/2.2.1/basic/jquery.qtip.min.css">
   </head>
   <body>
     <div id="messages"></div>
@@ -24,33 +26,43 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://cdn.jsdelivr.net/qtip2/2.2.1/basic/jquery.qtip.min.js"></script>
     <script>
       var socket = io();
       
       var data = {
-        username : ''
+        username : '',
+        message : ''
       };
       
       //send message
       $('#message-form').submit(function(e) {
-        socket.emit('chat message', $('#m').val());
+        var message = $('#m').val() + '';
+        var username = data.username === '' ? 'Anon' : data.username;
+        socket.emit('chat message', {message: message, username: username});
         $('#m').val('');
-        //returns false to prevent default event
         return false; 
       });
       
-     //change user name
-     $('#username-form').submit(function(e) {
-       socket.emit('add user', $('#u').val());
-       data.username = $('#u').val();
-       $('#u').val('');
-       return false;
-     });
+      //change user name
+      $('#username-form').submit(function(e) {
+        var username = $('#u').val();
+        data.username = username;
+        return false;
+      });
       
       //when emit 'chat message' fires from server
-      socket.on('chat message', function(msg) {
-        $('#messages').append($('<div>').text(data.username + ": " + msg));
+      socket.on('chat message', function(data) {
+        console.log('Data is ', data);
+        var messageDiv = $('<div>')
+                           .attr('class', 'message')
+                           .attr('title', data.username)
+                           .text(data.message);
+        $('#messages').append(messageDiv);
+        $('#messages:last-child').qtip();
+        console.log($('#messages:last-child'));
       });
+      
       
       
     </script>
