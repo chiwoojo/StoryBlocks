@@ -17,21 +17,28 @@
   </head>
   
   <body>
-
-     <!-- Inside Modal -->
-     <div id="modal1" class="modal">
-       <div class="modal-content">
-         <div class="input-field">
-           <input id="u" type="text" class="validate">
-           <label for="story-line">Change Username to...</label>
-         </div>
+    
+<!--     <ul id="dropdown1" class="dropdown-content">
+      <li><a href="#!">one</a></li>
+      <li><a href="#!">two</a></li>
+      <li class="divider"></li>
+      <li><a href="#!">three</a></li>
+    </ul>
+    <nav>
+       <div class="nav-wrapper">
+         <a href="#!" class="brand-logo">Logo</a>
+         <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+         <ul class="right hide-on-med-and-down">
+           <li><a href="sass.html">Sass</a></li>
+           <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+         </ul>
+         <ul class="side-nav" id="mobile-demo">
+           <li><a href="sass.html">Sass</a></li>
+           <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+         </ul>
        </div>
-       <div class="modal-footer">
-         <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" id="username-form">Change</a>
-         <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-       </div>
-     </div>
-     
+     </nav> -->
+   
     <!-- Messages Collection -->
     <div id="messages"></div>
 
@@ -39,16 +46,36 @@
     <div class="row" id="message-row">
       <form action="" id="message-form" class="col s12">
         <div class="input-field col s8">
+          <i class="material-icons prefix">mode_edit</i>
           <input id="m" type="text" class="validate">
           <label for="username-change">Continue the story...</label>
         </div>
         <div class="col s4">  
-          <!-- Modal Trigger -->
-          <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Change User name</a>
+          <!-- Bottom Modal Trigger -->
+          <a class="btn-floating btn-large pink lighten-3 modal-trigger" href="#modal2">
+            <i class="large mdi-navigation-menu"></i>
+          </a>
         </div>
       </form>
     </div>
     
+    
+    
+    
+
+    <!-- Bottom Modal Structure -->
+    <div id="modal2" class="modal bottom-sheet">
+      <div class="modal-content">
+        <div class="input-field">
+          <input id="u" type="text" class="validate">
+          <label for="username-change">Change Username to...</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" id="username-form">Change</a>
+      </div>
+    </div>
+            
     
 
     <!-- Socket IO client library -->
@@ -64,15 +91,33 @@
       
       var data = {
         username : '',
-        message : ''
+        message : '',
+        color : ''
       };
+      
+      //below code from socket.io example
+      var COLORS = [
+        'red lighten-3', 'pink lighten-3', 'purple lighten-3', 'deep-purple lighten-3',
+        'indigo lighten-3', 'blue lighten-3', 'light-blue lighten-3', 'cyan lighten-3',
+        'teal lighten-3', 'green lighten-3', 'light-green lighten-3', 'lime lighten-3'
+      ];
+      
+      function  getUsernameColor (username) {
+        var hash = 7;
+        for (var i = 0; i < username.length; i++) {
+          hash = username.charCodeAt(i) + (hash << 5) - hash;
+        }
+        var index = Math.abs(hash% COLORS.length);
+        return COLORS[index];
+      }
       
       //send message
       $('#message-form').submit(function(e) {
         e.preventDefault();
         var message = $('#m').val() + ' ';
         var username = data.username === '' ? 'Anon' : data.username;
-        socket.emit('chat message', {message: message, username: username});
+        var color = data.color === '' ? "red lighten-3" : data.color;
+        socket.emit('chat message', {message: message, username: username, color: color});
         $('#m').val('');
         return false; 
       });
@@ -82,6 +127,7 @@
         console.log("inside of username-form jQuery click");
         e.preventDefault();
         var username = $('#u').val();
+        data.color = getUsernameColor(username);
         data.username = username;
         $('#u').val('');
         return false;
@@ -92,17 +138,44 @@
         console.log('Data is ', data);
         var messageDiv = $('<div>')
                            .attr('id', data.uniqueId)
-                           .attr('class', 'btn tooltipped')
+                           .attr('class', 'btn tooltipped ' + data.color)
                            .attr('data-position', "bottom")
                            .attr('data-tooltip', data.username)
                            .attr('data-delay', '50')
                            .text(data.message);
         $('#messages').append(messageDiv);
         $('.tooltipped').tooltip();
-        //$('#' + data.uniqueId).qtip();
       });      
       
+      //initiate modal functionality
       $('.modal-trigger').leanModal();
+      
+      //intiatie NAV collapse function
+      $(".button-collapse").sideNav();
+      
+      /**
+       *    This function grabs all the text from the DIVs
+       */
+      function getStory() {
+        var story = [];
+        $('tooltipped').each(function() {
+          var oneBlock = $(this).val();
+          story.push(oneBlock);
+        });
+        return story.join(' ');
+      }
+      
+      
+      
+      var msg = new SpeechSynthesisUtterance('Hello World');
+      window.speechSynthesis.speak(msg);
+      
+      speechSynthesis.getVoices().forEach(function(voice) {
+        console.log(voice.name, voice.default ? '(default)' : '');
+      });
+      
+      
+
       
     </script>
   </body>

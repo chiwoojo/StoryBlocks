@@ -12,6 +12,11 @@ body {
   bottom: 0;
 }
 
+.btn {
+  text-transform: none;
+}
+      
+
 /*
 * {
   margin: 0; padding: 0; box-sizing: border-box; 
