@@ -37,7 +37,7 @@
       
       //send message
       $('#message-form').submit(function(e) {
-        var message = $('#m').val() + '';
+        var message = $('#m').val() + ' ';
         var username = data.username === '' ? 'Anon' : data.username;
         socket.emit('chat message', {message: message, username: username});
         $('#m').val('');
@@ -55,15 +55,13 @@
       socket.on('chat message', function(data) {
         console.log('Data is ', data);
         var messageDiv = $('<div>')
+                           .attr('id', data.uniqueId)
                            .attr('class', 'message')
                            .attr('title', data.username)
                            .text(data.message);
         $('#messages').append(messageDiv);
-        $('#messages:last-child').qtip();
-        console.log($('#messages:last-child'));
-      });
-      
-      
+        $('#' + data.uniqueId).qtip();
+      });      
       
     </script>
   </body>
