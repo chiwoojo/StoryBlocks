@@ -37,6 +37,7 @@
       
       //send message
       $('#message-form').submit(function(e) {
+        e.preventDefault();
         var message = $('#m').val() + ' ';
         var username = data.username === '' ? 'Anon' : data.username;
         socket.emit('chat message', {message: message, username: username});
@@ -46,6 +47,7 @@
       
       //change user name
       $('#username-form').submit(function(e) {
+        e.preventDefault();
         var username = $('#u').val();
         data.username = username;
         return false;
