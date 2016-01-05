@@ -1,6 +1,10 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
+//all css-js files to be loaded into client is in public folder so serve those up if requested.
+app.use(express.static('public'));
 
 var port = process.env.PORT || 3000;
 

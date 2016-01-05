@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <title>CollaboraStory</title>
+    <title>StoryBlocks</title>
     <!-- Google Icon Font -->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Materialize.CSS -->
@@ -18,18 +18,27 @@
   
   <body>
     <div id="messages"></div>
+<!--     
     <form action="" id="username-form">
       <input id="u" autocomplete="off" /><button>Change username</button>
+    </form> 
+-->
+  <div class="row" id="message-row">
+    <form action="" id="message-form" class="col s12">
+      <div class="input-field col s8">
+        <input id="m" type="text" class="validate">
+        <label for="story-line">Continue the story...</label>
+      </div>
     </form>
-    <form action="" id="message-form">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+  </div>
+<!--     
     <div class="login page">
       <div class="form">
         <h3 class="title">Your name?</h3>
         <input class="usernameInput" type="text" maxlength="15">
       </div>
-    </div>
+    </div> 
+-->
     <!-- Socket IO client library -->
     <script src="/socket.io/socket.io.js"></script>
     <!-- jQuery -->
@@ -69,11 +78,14 @@
         console.log('Data is ', data);
         var messageDiv = $('<div>')
                            .attr('id', data.uniqueId)
-                           .attr('class', 'message')
-                           .attr('title', data.username)
+                           .attr('class', 'btn tooltipped')
+                           .attr('data-position', "bottom")
+                           .attr('data-tooltip', data.username)
+                           .attr('data-delay', '50')
                            .text(data.message);
         $('#messages').append(messageDiv);
-        $('#' + data.uniqueId).qtip();
+        $('.tooltipped').tooltip();
+        //$('#' + data.uniqueId).qtip();
       });      
       
     </script>
