@@ -144,6 +144,10 @@
       
       //read story when button is clicked
       $('#play-sound').on('click', function(e) {
+        
+        //to check if onvoiceschanged, if it has been played. Solves multiple calls problem.
+        var playedOnce = false;
+        
         e.preventDefault();
         if (!playing) {
           playing = true;
@@ -151,13 +155,16 @@
           
           if (!grabbedVoices) {
             window.speechSynthesis.onvoiceschanged = function() {
-              grabbedVoices = true;
-              var voices = window.speechSynthesis.getVoices();
-              msg.voice = voices[3];
-              msg.onend = function(event) {
-                playing = false;
-              };
-              window.speechSynthesis.speak(msg);
+              if (!playedOnce) {
+                grabbedVoices = true;
+                playedOnce = true;
+                var voices = window.speechSynthesis.getVoices();
+                msg.voice = voices[3];
+                msg.onend = function(event) {
+                  playing = false;
+                };
+                window.speechSynthesis.speak(msg);
+              } 
             };
           } else {
             var voices = window.speechSynthesis.getVoices();
