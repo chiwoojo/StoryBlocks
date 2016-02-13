@@ -10,14 +10,18 @@ This project is built on Node.js, Express, Socket.io, and jQuery with Materializ
 
 ## Build 
 
-'''javascript
+```javascript
 npm install
-'''
+```
 
 ## Run
 
-'''javascript
+```javascript
 nodemon server/server.js
-'''
+```
 
 then go to localhost:3000
+
+# Team 
+
+Full-Stack Engineer : Vincent Jo
