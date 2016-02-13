@@ -1,6 +1,6 @@
 # StoryBlocks
 
-https://cloud.githubusercontent.com/assets/13400593/13030426/99dbdcb2-d25f-11e5-85d7-9bf44bcf508d.jpg
+![screenshot-storyblocks](https://cloud.githubusercontent.com/assets/13400593/13030426/99dbdcb2-d25f-11e5-85d7-9bf44bcf508d.jpg)
 
 A web application that lets you create a story with your friends through real-time collaboration. This is a project that worked on at Hack Reactor. We took 3 days to come up with an idea and finish an MVP project. 
 
