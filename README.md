@@ -1,2 +1,4 @@
-# my-mvp-baby
-MVP project for Hack Reactor
+# StoryBlocks
+
+A web application that lets you create a story with your friends through real-time collaboration
+
